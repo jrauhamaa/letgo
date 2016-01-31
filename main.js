@@ -9,12 +9,34 @@ var { ToggleButton } = require('sdk/ui/button/toggle');
 var panels = require("sdk/panel");
 var self = require("sdk/self");
 
+if (!ss.storage)
+  ss.storage = {};
+
+if (!ss.storage.waitExpirationTime)
+  ss.storage.waitExpirationTime = 30;
+
+if (typeof ss.storage.active == "undefined")
+  ss.storage.active = true;
+
+if (!ss.storage.waitingTime)
+  ss.storage.waitingTime = 30;
+
+if (!ss.storage.filteredDomains)
+  ss.storage.filteredDomains = [];
+
+
 var panel = panels.Panel({
   contentURL: data.url("config.html"),
   contentScriptFile: data.url("config.js"),
   contentScriptWhen: "ready",
-  onShow: function() {panel.postMessage("tää viesti tulee addonista");}
+  onMessage: storeConfig,
+  onHide: handleHide,
+  onShow: function() {panel.postMessage(ss.storage);}
 });
+
+function handleHide() {
+  button.state('window', {checked: false});
+}
 
 var button = ToggleButton({
   id: "my-button",
@@ -33,14 +55,6 @@ function handleChange(state) {
     });
   }
 }
-
-
-
-
-
-
-
-
 
 var patterns = ["*.google.fi"]
 
@@ -111,4 +125,10 @@ function waitExpired(currentPattern) {
   var diffMinutes = Math.floor((now-lastVisit)/(1000*60));
 
   return diffMinutes >= waitingPeriod;
+}
+
+function storeConfig(data) {
+  ss.storage.active = data.active;
+  ss.storage.waitExpirationTime = data.waitExpirationTime;
+  ss.storage.waitingTime = data.waitingTime;
 }

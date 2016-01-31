@@ -7,13 +7,44 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<style>
+		#content {
+			padding-left: 10px;
+			padding-top: 10px;
+			padding-bottom: 20px;
+		}
+
+		.domain-name {
+			padding-top: 5px;
+		}
+	</style>
+
 </head>
 
 <body>
-	<div>
-		<div id="content">asdfasdqwerqwerqwerf</div>
-		<div id="message">jou</div>
+	<div id="content">
+		<div class="form-group">
+		  <label for="active">Active</label>
+			<input type="checkbox" id="active-input">
+		</div>
+		<div class="form-group">
+			<label for="waitingTime">Waiting time (seconds)</label>
+			<input type="text" id="waitingTime-input">
+		</div>
+		<div class="form-group">
+			<label for="expirationTime">Wait expiration time (minutes)</label>
+			<input type="text" id="expirationTime-input">
+		</div>
+		<div class="form-group" id="filteredDomains-list">
+			<label for="filteredDomains">Filtered domains</label><br>
+
+		</div>
+
+		<button type="button" class="btn btn-primary" id="save-button">Save</button>
 	</div>
 </body>
+
+<!--<script src="config.js"> </script>-->
 
 </html>
