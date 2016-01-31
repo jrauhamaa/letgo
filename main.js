@@ -1,9 +1,44 @@
 var tabs = require("sdk/tabs");
 var pageMod = require("sdk/page-mod");
 var data = require("sdk/self").data;
+var tabs = require("sdk/tabs");
 var ss = require("sdk/simple-storage");
 var base64 = require("sdk/base64");
 var { MatchPattern } = require("sdk/util/match-pattern");
+var { ToggleButton } = require('sdk/ui/button/toggle');
+var panels = require("sdk/panel");
+var self = require("sdk/self");
+
+var button = ToggleButton({
+  id: "my-button",
+  label: "my button",
+  icon: {
+    "16": data.url("firefox-16.png"),
+    "32": data.url("firefox-32.png")
+  },
+  onChange: handleChange
+});
+
+var panel = panels.Panel({
+  contentURL: data.url("panel.html"),
+  onHide: handleHide
+});
+
+function handleChange(state) {
+  if (state.checked) {
+    panel.show({
+      position: button
+    });
+  }
+}
+
+function handleHide() {
+  button.state('window', {checked: false});
+}
+
+
+
+
 
 var patterns = ["*.google.fi"]
 
@@ -15,6 +50,7 @@ pageMod.PageMod({
   contentScriptWhen: 'start',
 
   onAttach: function onAttach(worker) {
+
     var ourTab = worker.tab;
 
     // Never bounce for iframes.
@@ -46,7 +82,7 @@ pageMod.PageMod({
     ss.storage.visits[currentPattern] = new Date().toISOString();
 
     // move to waiting page
-    var redirURL = data.url("index.html") + "?" +
+    var redirURL = data.url("redirect.html") + "?" +
                            "dst" + "=" + base64.encode(ourTab.url);
     ourTab.url = redirURL;
   }
