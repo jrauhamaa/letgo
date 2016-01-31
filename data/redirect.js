@@ -1,9 +1,5 @@
-
 var content = document.getElementById("content");
 var messageField = document.getElementById("message");
-
-var delay = 5;
-var begin = new Date();
 
 // http://stackoverflow.com/questions/979975/how-to-get-the-value-from-the-url-parameter
 var QueryString = function () {
@@ -28,6 +24,11 @@ var QueryString = function () {
   }
     return query_string;
 }();
+var delay = 0;
+if (QueryString["waitingTime"])
+  delay = QueryString["waitingTime"];
+
+var begin = new Date();
 
 setInterval(wait, 100);
 

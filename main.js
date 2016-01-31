@@ -9,22 +9,19 @@ var { ToggleButton } = require('sdk/ui/button/toggle');
 var panels = require("sdk/panel");
 var self = require("sdk/self");
 
+// init storage
 if (!ss.storage)
   ss.storage = {};
-
 if (!ss.storage.waitExpirationTime)
   ss.storage.waitExpirationTime = 30;
-
 if (typeof ss.storage.active == "undefined")
   ss.storage.active = true;
-
 if (!ss.storage.waitingTime)
   ss.storage.waitingTime = 30;
-
 if (!ss.storage.filteredDomains)
   ss.storage.filteredDomains = [];
 
-
+// create config panel
 var panel = panels.Panel({
   contentURL: data.url("config.html"),
   contentScriptFile: data.url("config.js"),
@@ -33,11 +30,9 @@ var panel = panels.Panel({
   onHide: handleHide,
   onShow: function() {panel.postMessage(ss.storage);}
 });
-
 function handleHide() {
   button.state('window', {checked: false});
 }
-
 var button = ToggleButton({
   id: "my-button",
   label: "my button",
@@ -47,7 +42,6 @@ var button = ToggleButton({
   },
   onChange: handleChange
 });
-
 function handleChange(state) {
   if (state.checked) {
     panel.show({
@@ -56,7 +50,7 @@ function handleChange(state) {
   }
 }
 
-var patterns = ["*.google.fi"]
+var patterns = ["*.google.fi"];
 
 pageMod.PageMod({
   include: patterns,
@@ -99,13 +93,18 @@ pageMod.PageMod({
 
     // move to waiting page
     var redirURL = data.url("redirect.html") + "?" +
-                           "dst" + "=" + base64.encode(ourTab.url);
+                           "dst" + "=" + base64.encode(ourTab.url) + "&" +
+                           "waitingTime" + "=" + ss.storage.waitingTime;
     ourTab.url = redirURL;
   }
 });
 
 
 function waitExpired(currentPattern) {
+
+  if(ss.storage && ss.storage.active == false)
+    return;
+
   // if the site has never been visited
   if (!ss.storage.visits || !ss.storage.visits[currentPattern]) {
     return true;
@@ -113,10 +112,10 @@ function waitExpired(currentPattern) {
 
   // get the time period (in minutes) after which wait has expired
   var waitingPeriod;
-  if (ss.storage.waitingPeriod) {
-    waitingPeriod = ss.storage.waitingPeriod;
+  if (ss.storage.waitExpirationTime) {
+    waitingPeriod = ss.storage.waitExpirationTime;
   } else {
-    waitingPeriod = 1; // default waiting period is 30 minutes
+    waitingPeriod = 30; // default waiting period is 30 minutes
   }
 
   // get time of last visit to the site
