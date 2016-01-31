@@ -9,6 +9,13 @@ var { ToggleButton } = require('sdk/ui/button/toggle');
 var panels = require("sdk/panel");
 var self = require("sdk/self");
 
+var panel = panels.Panel({
+  contentURL: data.url("config.html"),
+  contentScriptFile: data.url("config.js"),
+  contentScriptWhen: "ready",
+  onShow: function() {panel.postMessage("tää viesti tulee addonista");}
+});
+
 var button = ToggleButton({
   id: "my-button",
   label: "my button",
@@ -19,11 +26,6 @@ var button = ToggleButton({
   onChange: handleChange
 });
 
-var panel = panels.Panel({
-  contentURL: data.url("panel.html"),
-  onHide: handleHide
-});
-
 function handleChange(state) {
   if (state.checked) {
     panel.show({
@@ -32,9 +34,9 @@ function handleChange(state) {
   }
 }
 
-function handleHide() {
-  button.state('window', {checked: false});
-}
+
+
+
 
 
 
