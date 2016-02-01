@@ -20,8 +20,8 @@ function handleHide() {
   button.state('window', {checked: false});
 }
 var button = ToggleButton({
-  id: "my-button",
-  label: "my button",
+  id: "letgo-panel",
+  label: "LetGo",
   icon: {
     "16": data.url("letgo.ico") // from bholley's older version of the addon
   },
