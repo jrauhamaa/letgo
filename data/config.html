@@ -7,16 +7,39 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<!-- from http://www.cssflow.com/snippets/simple-toggle-switch/demo -->
+		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 	<style>
 		#content {
 			padding-left: 10px;
 			padding-top: 10px;
-			padding-bottom: 20px;
+			padding-bottom: 10px;
 		}
 
 		.domain-name {
 			padding-top: 5px;
+		}
+
+		.input-label{
+			width: 200px;
+		}
+
+		.short-input{
+			width:80px;
+		}
+
+		.form-group{
+			margin-bottom: 5px;
+		}
+
+		#newDomain-button{
+			margin-left: 10px;
+		}
+
+		#save-button{
+			margin-bottom: 10px;
+
 		}
 	</style>
 
@@ -24,27 +47,33 @@
 
 <body>
 	<div id="content">
+		<button type="button" class="btn btn-primary " id="save-button">Save</button>
 		<div class="form-group">
-		  <label for="active">Active</label>
-			<input type="checkbox" id="active-input">
+		  <label for="active" class="input-label">Active</label>
+			<label class="switch">
+	      <input type="checkbox" id="active-input" class="switch-input">
+	      <span class="switch-label" data-on="On" data-off="Off"></span>
+	      <span class="switch-handle"></span>
+	    </label>
+			<!--<input type="checkbox" id="active-input" >-->
 		</div>
 		<div class="form-group">
-			<label for="waitingTime">Waiting time (seconds)</label>
-			<input type="text" id="waitingTime-input">
+			<label for="waitingTime" class="input-label">Waiting time (seconds)</label>
+			<input type="text" id="waitingTime-input" class="short-input">
 		</div>
 		<div class="form-group">
-			<label for="expirationTime">Wait expiration time (minutes)</label>
-			<input type="text" id="expirationTime-input">
+			<label for="expirationTime" class="input-label">Wait expiration time (min)</label>
+			<input type="text" id="expirationTime-input" class="short-input">
 		</div>
 		<div class="form-group">
-			<label for="filteredDomains">Filtered domains</label><br>
+			<label for="filteredDomains">Filtered domains</label>
+			<button type="button" class="btn btn-default btn-xs" id="newDomain-button">+</button>
 			<div id="filteredDomains-list"></div>
-			<div class="domain-name"><button type="button" class="btn btn-default btn-sm" id="newDomain-button">+</button></div>
-		</div>
 
-		<button type="button" class="btn btn-primary" id="save-button">Save</button>
+		</div>
 	</div>
 </body>
-
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="config.js"> </script>-->
 
 </html>

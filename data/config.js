@@ -10,14 +10,14 @@ function render(storage) {
 
   wrapper.empty();
   for (var i=0; i<storage.filteredDomains.length; i++) {
-    wrapper.append('<div><input type="text" class="domain-input" value="'+storage.filteredDomains[i]+'"/><a href="#" class="remove_field">Remove</a></div>');
+    wrapper.append('<div><input type="text" class="domain-input" value="'+storage.filteredDomains[i]+'"/><button class="remove_field btn btn-default btn-xs">x</button></div>');
   }
 }
 
 // add new input field
 add_button.click(function(e){
   e.preventDefault();
-  $(wrapper).append('<div><input type="text" class="domain-input"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+  $(wrapper).prepend('<div><input type="text" class="domain-input"/><button class="remove_field btn btn-default btn-xs">x</button></div>');
 });
 
 // remove input field
