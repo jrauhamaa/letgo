@@ -4,6 +4,7 @@ var saveButton = $("#save-button");
 
 // pre-fill input fields
 function render(storage) {
+  $("#feedback").empty();
   $("#active-input").prop('checked', storage.active);
   $("#waitingTime-input").val(storage.waitingTime);
   $("#expirationTime-input").val(storage.waitExpirationTime);

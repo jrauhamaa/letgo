@@ -42,6 +42,8 @@ function activatePageMod() {
   // init storage
   initStorage();
 
+  if (ss.storage.filteredDomains.length === 0)
+    return;
   // filter patterns
   var patterns = ss.storage.filteredDomains.map(domainToPattern);
 
@@ -94,9 +96,9 @@ function initStorage() {
   if (typeof ss.storage.active == "undefined")
     ss.storage.active = true;
   if (!ss.storage.waitingTime)
-    ss.storage.waitingTime = 5;
+    ss.storage.waitingTime = 30;
   if (!ss.storage.filteredDomains)
-    ss.storage.filteredDomains = ['google.fi', 'facebook.com'];
+    ss.storage.filteredDomains = [];
 }
 
 // find which pattern matched with the url
