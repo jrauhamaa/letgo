@@ -56,6 +56,14 @@
 			display: inline-block;
 			margin-left: 5px;
 		}
+
+		.url {
+			color: #264c73;
+		}
+
+		h4 {
+			color: #336699;
+		}
 	</style>
 
 </head>
@@ -89,6 +97,13 @@
 			<button type="button" class="btn btn-default btn-xs" id="newDomain-button">Add</button>
 			<div id="filteredDomains-list"></div>
 
+		</div>
+
+		<div class="instructions">
+			<h4>Instructions</h4>
+			<p>LetGo will only filter sites when it's active</p>
+			<p>Wait expiration time is the time LetGo will wait after delaying a page load until it will do it again</p>
+			<p>In filtered domains include only the site's domain, eg. <span class="url">google.fi</span> instead of <span class="url">https://www.google.fi/?gfe_rd=cr&ei=-9OvVrKqAair8weupanQCg&gws_rd=ssl</span></p>
 		</div>
 	</div>
 </body>
