@@ -62,6 +62,7 @@ saveButton.click(function() {
   storage.active = $("#active-input").prop('checked');
   storage.waitingTime = $("#waitingTime-input").val();
   storage.waitExpirationTime = $("#expirationTime-input").val();
+  
   var filteredDomains = [];
   var domainElems = document.getElementsByClassName("domain-input");
   for (var i=0; i<domainElems.length; i++) {
@@ -69,8 +70,6 @@ saveButton.click(function() {
       filteredDomains.push(domainElems[i].value);
   }
   storage.filteredDomains = filteredDomains;
-
-  console.log(storage);
 
   self.postMessage(storage);
 
