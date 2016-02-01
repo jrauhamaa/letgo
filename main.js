@@ -1,5 +1,5 @@
 var tabs = require("sdk/tabs");
-var pageMod = require("sdk/page-mod");
+//var pageMod = require("sdk/page-mod");
 var data = require("sdk/self").data;
 var tabs = require("sdk/tabs");
 var ss = require("sdk/simple-storage");
@@ -9,22 +9,13 @@ var { ToggleButton } = require('sdk/ui/button/toggle');
 var panels = require("sdk/panel");
 var self = require("sdk/self");
 
-// init storage
-if (!ss.storage)
-  ss.storage = {};
-if (!ss.storage.waitExpirationTime)
-  ss.storage.waitExpirationTime = 30;
-if (typeof ss.storage.active == "undefined")
-  ss.storage.active = true;
-if (!ss.storage.waitingTime)
-  ss.storage.waitingTime = 30;
-if (!ss.storage.filteredDomains)
-  ss.storage.filteredDomains = [];
+
+var pageMod;
 
 // create config panel
 var panel = panels.Panel({
   contentURL: data.url("config.html"),
-  contentScriptFile: data.url("config.js"),
+  contentScriptFile: [data.url("jquery.min.js"), data.url("config.js")],
   contentScriptWhen: "ready",
   onMessage: storeConfig,
   onHide: handleHide,
@@ -50,54 +41,77 @@ function handleChange(state) {
   }
 }
 
-var patterns = ["*.google.fi"];
+activatePageMod();
 
-pageMod.PageMod({
-  include: patterns,
 
-  contentScript: '',
+function activatePageMod() {
 
-  contentScriptWhen: 'start',
+  console.log("funciton called");
+  console.log(ss.storage);
 
-  onAttach: function onAttach(worker) {
+  // init storage
+  if (!ss.storage)
+    ss.storage = {};
+  if (!ss.storage.waitExpirationTime)
+    ss.storage.waitExpirationTime = 30;
+  if (typeof ss.storage.active == "undefined")
+    ss.storage.active = true;
+  if (!ss.storage.waitingTime)
+    ss.storage.waitingTime = 30;
+  if (!ss.storage.filteredDomains)
+    ss.storage.filteredDomains = ['google.fi', 'facebook.com'];
 
-    var ourTab = worker.tab;
+  var patterns = ss.storage.filteredDomains.map(domainToPattern);
+console.log(patterns);
 
-    // Never bounce for iframes.
-    if (worker.url != ourTab.url)
-      return;
+  pageMod = require("sdk/page-mod").PageMod({
+    include: patterns,
 
-    // find out which pattern is the one that matches with current url
-    var currentPattern;
-    for (var i=0; i<patterns.length; i++) {
-      var pattern = new MatchPattern(patterns[i]);
-      if(pattern.test(ourTab.url)){
-        currentPattern = patterns[i];
-        break;
+    contentScript: '',
+
+    contentScriptWhen: 'start',
+
+    onAttach: function onAttach(worker) {
+
+      var ourTab = worker.tab;
+
+      // Never bounce for iframes.
+      if (worker.url != ourTab.url)
+        return;
+
+      // find out which pattern is the one that matches with current url
+      var currentPattern;
+      for (var i=0; i<patterns.length; i++) {
+        var pattern = new MatchPattern(patterns[i]);
+        if(pattern.test(ourTab.url)){
+          currentPattern = patterns[i];
+          break;
+        }
       }
-    }
-    if(!currentPattern){
-      console.log("Error: delaying function triggered without url matching to any pattern");
-      return;
-    }
+      if(!currentPattern){
+        console.log("Error: delaying function triggered without url matching to any pattern");
+        return;
+      }
 
-    // check if last wait hasn't yet expired
-    if (!waitExpired(currentPattern)) {
-      return;
+      // check if last wait hasn't yet expired
+      if (!waitExpired(currentPattern)) {
+        return;
+      }
+
+      // save the time the site got visited
+      if (!ss.storage.visits)
+        ss.storage.visits = {};
+      ss.storage.visits[currentPattern] = new Date().toISOString();
+
+      // move to waiting page
+      var redirURL = data.url("redirect.html") + "?" +
+                             "dst" + "=" + base64.encode(ourTab.url) + "&" +
+                             "waitingTime" + "=" + ss.storage.waitingTime;
+      ourTab.url = redirURL;
     }
-
-    // save the time the site got visited
-    if (!ss.storage.visits)
-      ss.storage.visits = {};
-    ss.storage.visits[currentPattern] = new Date().toISOString();
-
-    // move to waiting page
-    var redirURL = data.url("redirect.html") + "?" +
-                           "dst" + "=" + base64.encode(ourTab.url) + "&" +
-                           "waitingTime" + "=" + ss.storage.waitingTime;
-    ourTab.url = redirURL;
-  }
-});
+  });
+  console.log(pageMod);
+}
 
 
 function waitExpired(currentPattern) {
@@ -126,8 +140,20 @@ function waitExpired(currentPattern) {
   return diffMinutes >= waitingPeriod;
 }
 
+function domainToPattern(domain) {
+  return '*.'+domain;
+}
+
 function storeConfig(data) {
   ss.storage.active = data.active;
   ss.storage.waitExpirationTime = data.waitExpirationTime;
   ss.storage.waitingTime = data.waitingTime;
+  ss.storage.filteredDomains = data.filteredDomains;
+  console.log(pageMod);
+  if (pageMod)
+    pageMod.destroy();
+  console.log(pageMod);
+
+
+  activatePageMod();
 }
