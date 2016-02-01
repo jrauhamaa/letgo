@@ -14,6 +14,30 @@ function render(storage) {
   }
 }
 
+// validate input
+function valid() {
+  var errors = [];
+
+  var waitingTime = $("#waitingTime-input").val();
+  if (waitingTime.length === 0 || isNaN(waitingTime)){
+    errors.push("Waiting time must be a number");
+  }
+
+  var expirationTime = $("#expirationTime-input").val();
+  if (expirationTime.length === 0 || isNaN(expirationTime)){
+    errors.push("Expiration time must be a number");
+  }
+
+  var errorField = $("#error-message");
+  errorField.empty();
+
+  for (var i=0; i<errors.length; i++) {
+    errorField.append("<div>"+errors[i]+"</div>");
+  }
+
+  return errors.length === 0;
+}
+
 // add new input field
 add_button.click(function(e){
   e.preventDefault();
@@ -27,18 +51,26 @@ wrapper.on("click",".remove_field", function(e){ //user click on remove text
 
 // save settings
 saveButton.click(function() {
+  $("#feedback").empty();
+  if (!valid())
+    return;
+
   var storage = {};
-  storage.active = document.getElementById("active-input").checked;
-  storage.waitingTime = document.getElementById("waitingTime-input").value;
-  storage.waitExpirationTime = document.getElementById("expirationTime-input").value;
+  storage.active = $("#active-input").prop('checked');
+  storage.waitingTime = $("#waitingTime-input").val();
+  storage.waitExpirationTime = $("expirationTime-input").val();
   var filteredDomains = [];
   var domainElems = document.getElementsByClassName("domain-input");
   for (var i=0; i<domainElems.length; i++) {
-    filteredDomains.push(domainElems[i].value);
+    if(domainElems[i].value.length)
+      filteredDomains.push(domainElems[i].value);
   }
   storage.filteredDomains = filteredDomains;
 
   self.postMessage(storage);
+
+  $("#feedback").html("Changes successfully saved");
+
 });
 
 // react to messages sent by main script

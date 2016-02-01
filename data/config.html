@@ -7,9 +7,9 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 
-		<!-- from http://www.cssflow.com/snippets/simple-toggle-switch/demo -->
-		<link rel="stylesheet" href="style.css">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<!-- from http://www.cssflow.com/snippets/simple-toggle-switch/demo -->
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 	<style>
 		#content {
 			padding-left: 10px;
@@ -22,11 +22,13 @@
 		}
 
 		.input-label{
-			width: 200px;
+			width: 185px;
 		}
 
 		.short-input{
-			width:80px;
+			width:100px;
+			height: 30px;
+			display: inline-block;
 		}
 
 		.form-group{
@@ -38,8 +40,17 @@
 		}
 
 		#save-button{
-			margin-bottom: 10px;
+			margin-bottom: 5px;
+		}
 
+		#error-message{
+			color: red;
+			margin-bottom: 5px
+		}
+
+		#feedback {
+			color: green;
+			margin-bottom: 5px;
 		}
 	</style>
 
@@ -48,6 +59,10 @@
 <body>
 	<div id="content">
 		<button type="button" class="btn btn-primary " id="save-button">Save</button>
+
+		<div id="error-message"></div>
+		<div id="feedback"></div>
+
 		<div class="form-group">
 		  <label for="active" class="input-label">Active</label>
 			<label class="switch">
@@ -57,13 +72,13 @@
 	    </label>
 			<!--<input type="checkbox" id="active-input" >-->
 		</div>
-		<div class="form-group">
-			<label for="waitingTime" class="input-label">Waiting time (seconds)</label>
-			<input type="text" id="waitingTime-input" class="short-input">
+		<div class="form-group has-feedback">
+			<label for="waitingTime" class="input-label">Waiting time (sec)</label>
+			<input type="text" id="waitingTime-input" class="form-control short-input">
 		</div>
-		<div class="form-group">
+		<div class="form-group has-feedback">
 			<label for="expirationTime" class="input-label">Wait expiration time (min)</label>
-			<input type="text" id="expirationTime-input" class="short-input">
+			<input type="text" id="expirationTime-input" class="form-control short-input">
 		</div>
 		<div class="form-group">
 			<label for="filteredDomains">Filtered domains</label>
@@ -75,5 +90,4 @@
 </body>
 <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script src="config.js"> </script>-->
-
 </html>
