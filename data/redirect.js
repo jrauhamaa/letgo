@@ -1,5 +1,4 @@
-var content = document.getElementById("content");
-var messageField = document.getElementById("message");
+var content = document.getElementById("message");
 
 // http://stackoverflow.com/questions/979975/how-to-get-the-value-from-the-url-parameter
 var QueryString = function () {
@@ -32,7 +31,6 @@ var begin = new Date();
 
 setInterval(wait, 100);
 
-
 function seconds_since_epoch(dateObj){ return Math.floor( dateObj.getTime() / 1000 ) }
 
 function wait() {
@@ -40,14 +38,17 @@ function wait() {
 
   var timeDiff = seconds_since_epoch(now) - seconds_since_epoch(begin);
 
-  content.innerHTML = timeDiff <= delay ? delay - timeDiff : "Redirecting...";
+  if (QueryString["dst"]){
+    var timeLeft = delay - timeDiff;
+    var message = "You can view <span class='url'>"+window.atob(QueryString["dst"])+"</span> in <span class='time'>"+timeLeft+"</span> seconds";
+    content.innerHTML = timeDiff <= delay ? message : "Redirecting...";
+  } else {
+    content.innerHTML = "Redirect destination not defined";
+  }
 
   if (timeDiff >= delay) {
     if (QueryString["dst"]) {
       window.location = window.atob(QueryString["dst"]);
-    } else {
-      messageField.innerHTML = "Redirect destination not defined";
-      console.log("Error: dst not defined in the query string");
     }
   }
 }
