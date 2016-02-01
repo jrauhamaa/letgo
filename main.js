@@ -41,16 +41,7 @@ activatePageMod();
 function activatePageMod() {
 
   // init storage
-  if (!ss.storage)
-    ss.storage = {};
-  if (!ss.storage.waitExpirationTime)
-    ss.storage.waitExpirationTime = 30;
-  if (typeof ss.storage.active == "undefined")
-    ss.storage.active = true;
-  if (!ss.storage.waitingTime)
-    ss.storage.waitingTime = 5;
-  if (!ss.storage.filteredDomains)
-    ss.storage.filteredDomains = ['google.fi', 'facebook.com'];
+  initStorage();
 
   // filter patterns
   var patterns = ss.storage.filteredDomains.map(domainToPattern);
@@ -71,14 +62,7 @@ function activatePageMod() {
         return;
 
       // find out which pattern is the one that matches with current url
-      var currentPattern;
-      for (var i=0; i<patterns.length; i++) {
-        var pattern = new MatchPattern(patterns[i]);
-        if(pattern.test(ourTab.url)){
-          currentPattern = patterns[i];
-          break;
-        }
-      }
+      var currentPattern = findPattern(patterns, ourTab.url);
       if(!currentPattern){
         console.log("Error: delaying function triggered without url matching to any pattern");
         return;
@@ -90,20 +74,7 @@ function activatePageMod() {
       }
 
       // save the time the site got visited
-      if (!ss.storage.visits) {
-        ss.storage.visits = {};
-        ss.storage.visits[currentPattern] = new Date().toISOString();
-      } else {
-        var lastVisit = new Date(ss.storage.visits[currentPattern]);
-        var now = new Date();
-        var diffMinutes = Math.floor((now-lastVisit)/(1000*60))
-
-        // avoid infinite redirect loop
-        if (diffMinutes >= ss.storage.waitExpirationTime + 2){
-          ss.storage.visits[currentPattern] = new Date().toISOString();
-        }
-      }
-
+      visit(currentPattern);
 
       // move to waiting page
       var redirURL = data.url("redirect.html") + "?" +
@@ -112,6 +83,49 @@ function activatePageMod() {
       ourTab.url = redirURL;
     }
   });
+}
+
+// set default values to the variables that are not defined
+function initStorage() {
+  // init storage
+  if (!ss.storage)
+    ss.storage = {};
+  if (!ss.storage.waitExpirationTime)
+    ss.storage.waitExpirationTime = 30;
+  if (typeof ss.storage.active == "undefined")
+    ss.storage.active = true;
+  if (!ss.storage.waitingTime)
+    ss.storage.waitingTime = 5;
+  if (!ss.storage.filteredDomains)
+    ss.storage.filteredDomains = ['google.fi', 'facebook.com'];
+}
+
+// find which pattern matched with the url
+function findPattern(patterns, url) {
+  for (var i=0; i<patterns.length; i++) {
+    var pattern = new MatchPattern(patterns[i]);
+    if(pattern.test(url)){
+      return patterns[i];
+    }
+  }
+  return false;
+}
+
+// save the time the site got visited
+function visit(currentPattern) {
+  if (!ss.storage.visits) {
+    ss.storage.visits = {};
+    ss.storage.visits[currentPattern] = new Date().toISOString();
+  } else {
+    var lastVisit = new Date(ss.storage.visits[currentPattern]);
+    var now = new Date();
+    var diffMinutes = Math.floor((now-lastVisit)/(1000*60))
+
+    // avoid infinite redirect loop
+    if (diffMinutes >= ss.storage.waitExpirationTime + 2){
+      ss.storage.visits[currentPattern] = new Date().toISOString();
+    }
+  }
 }
 
 // Check if waiting time for the match pattern has expired
