@@ -79,18 +79,3 @@ self.on("message", function(message) {
   domainCount = 0;
   render(message);
 });
-
-// debug
-/*
-var sample = {
-  "active": true,
-  "waitExpirationTime": 30,
-  "waitingTime": 30,
-  "filteredDomains": [
-    "asdf",
-    "qwer"
-  ]
-}
-render(sample)
-
-*/

@@ -23,8 +23,7 @@ var button = ToggleButton({
   id: "my-button",
   label: "my button",
   icon: {
-    "16": data.url("firefox-16.png"),
-    "32": data.url("firefox-32.png")
+    "16": data.url("letgo.ico") // from bholley's older version of the addon
   },
   onChange: handleChange
 });
