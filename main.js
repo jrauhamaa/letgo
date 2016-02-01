@@ -117,6 +117,8 @@ function visit(currentPattern) {
   if (!ss.storage.visits) {
     ss.storage.visits = {};
     ss.storage.visits[currentPattern] = new Date().toISOString();
+  } else if (!ss.storage.visits[currentPattern]) {
+    ss.storage.visits[currentPattern] = new Date().toISOString();
   } else {
     var lastVisit = new Date(ss.storage.visits[currentPattern]);
     var now = new Date();
