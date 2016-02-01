@@ -48,7 +48,7 @@ function activatePageMod() {
   if (typeof ss.storage.active == "undefined")
     ss.storage.active = true;
   if (!ss.storage.waitingTime)
-    ss.storage.waitingTime = 30;
+    ss.storage.waitingTime = 5;
   if (!ss.storage.filteredDomains)
     ss.storage.filteredDomains = ['google.fi', 'facebook.com'];
 
@@ -90,9 +90,20 @@ function activatePageMod() {
       }
 
       // save the time the site got visited
-      if (!ss.storage.visits)
+      if (!ss.storage.visits) {
         ss.storage.visits = {};
-      ss.storage.visits[currentPattern] = new Date().toISOString();
+        ss.storage.visits[currentPattern] = new Date().toISOString();
+      } else {
+        var lastVisit = new Date(ss.storage.visits[currentPattern]);
+        var now = new Date();
+        var diffMinutes = Math.floor((now-lastVisit)/(1000*60))
+
+        // avoid infinite redirect loop
+        if (diffMinutes >= ss.storage.waitExpirationTime + 2){
+          ss.storage.visits[currentPattern] = new Date().toISOString();
+        }
+      }
+
 
       // move to waiting page
       var redirURL = data.url("redirect.html") + "?" +
