@@ -1,14 +1,9 @@
-var tabs = require("sdk/tabs");
-//var pageMod = require("sdk/page-mod");
 var data = require("sdk/self").data;
-var tabs = require("sdk/tabs");
 var ss = require("sdk/simple-storage");
 var base64 = require("sdk/base64");
 var { MatchPattern } = require("sdk/util/match-pattern");
 var { ToggleButton } = require('sdk/ui/button/toggle');
 var panels = require("sdk/panel");
-var self = require("sdk/self");
-
 
 var pageMod;
 
@@ -43,11 +38,7 @@ function handleChange(state) {
 
 activatePageMod();
 
-
 function activatePageMod() {
-
-  console.log("funciton called");
-  console.log(ss.storage);
 
   // init storage
   if (!ss.storage)
@@ -61,8 +52,8 @@ function activatePageMod() {
   if (!ss.storage.filteredDomains)
     ss.storage.filteredDomains = ['google.fi', 'facebook.com'];
 
+  // filter patterns
   var patterns = ss.storage.filteredDomains.map(domainToPattern);
-console.log(patterns);
 
   pageMod = require("sdk/page-mod").PageMod({
     include: patterns,
@@ -110,10 +101,9 @@ console.log(patterns);
       ourTab.url = redirURL;
     }
   });
-  console.log(pageMod);
 }
 
-
+// Check if waiting time for the match pattern has expired
 function waitExpired(currentPattern) {
 
   if(ss.storage && ss.storage.active == false)
@@ -140,20 +130,20 @@ function waitExpired(currentPattern) {
   return diffMinutes >= waitingPeriod;
 }
 
+// convert domain name to a match pattern
 function domainToPattern(domain) {
   return '*.'+domain;
 }
 
+// store config changes and apply them to pagemod
 function storeConfig(data) {
   ss.storage.active = data.active;
   ss.storage.waitExpirationTime = data.waitExpirationTime;
   ss.storage.waitingTime = data.waitingTime;
   ss.storage.filteredDomains = data.filteredDomains;
-  console.log(pageMod);
+
   if (pageMod)
     pageMod.destroy();
-  console.log(pageMod);
-
 
   activatePageMod();
 }
