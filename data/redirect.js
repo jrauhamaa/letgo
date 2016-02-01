@@ -29,7 +29,7 @@ if (QueryString["waitingTime"])
 
 var begin = new Date();
 
-setInterval(wait, 100);
+var interval = setInterval(wait, 100);
 
 function seconds_since_epoch(dateObj){ return Math.floor( dateObj.getTime() / 1000 ) }
 
@@ -48,6 +48,7 @@ function wait() {
 
   if (timeDiff >= delay) {
     if (QueryString["dst"]) {
+      clearInterval(interval);
       window.location = window.atob(QueryString["dst"]);
     }
   }

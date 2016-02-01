@@ -143,11 +143,11 @@ function waitExpired(currentPattern) {
   }
 
   // get the time period (in minutes) after which wait has expired
-  var waitingPeriod;
+  var expirationTime;
   if (ss.storage.waitExpirationTime) {
-    waitingPeriod = ss.storage.waitExpirationTime;
+    expirationTime = ss.storage.waitExpirationTime;
   } else {
-    waitingPeriod = 30; // default waiting period is 30 minutes
+    expirationTime = 30; // default waiting period is 30 minutes
   }
 
   // get time of last visit to the site
@@ -156,10 +156,10 @@ function waitExpired(currentPattern) {
   var diffMinutes = Math.floor((now-lastVisit)/(1000*60));
 
   // check that the user has waited for the waiting time
-  if (diffMinutes < waitingPeriod) {
+  if (diffMinutes < expirationTime) {
     var diffSeconds = Math.floor((now-lastVisit)/(1000));
 
-    return diffSeconds < ss.storage.waitingTime - 2;
+    return diffSeconds < ss.storage.waitingTime - 5;
   }
 
   return true;
