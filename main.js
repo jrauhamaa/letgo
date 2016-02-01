@@ -127,7 +127,14 @@ function waitExpired(currentPattern) {
   var now = new Date();
   var diffMinutes = Math.floor((now-lastVisit)/(1000*60));
 
-  return diffMinutes >= waitingPeriod;
+  // check that the user has waited for the waiting time
+  if (diffMinutes < waitingPeriod) {
+    var diffSeconds = Math.floor((now-lastVisit)/(1000));
+
+    return diffSeconds < ss.storage.waitingTime - 2;
+  }
+
+  return true;
 }
 
 // convert domain name to a match pattern
