@@ -49,7 +49,23 @@ function wait() {
   if (timeDiff >= delay) {
     if (QueryString["dst"]) {
       clearInterval(interval);
-      window.location = window.atob(QueryString["dst"]);
+      var dst = window.atob(QueryString["dst"]);
+      window.location = insertParam("letgowaitdone", "1", dst);
     }
+  }
+}
+
+function insertParam(key,value, url)
+{
+  key = encodeURIComponent(key); value = encodeURIComponent(value);
+
+  var kvp = key+"="+value;
+
+  var index = url.indexOf('?');
+
+  if (index === -1) {
+    return url + '?'+kvp;
+  } else {
+    return url+'&'+kvp;
   }
 }
