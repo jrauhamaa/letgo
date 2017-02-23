@@ -1,0 +1,44 @@
+#content {
+	padding-left: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.domain-name {
+	padding-top: 5px;
+}
+.input-label{
+	width: 185px;
+}
+.short-input{
+	width:100px;
+	height: 30px;
+	display: inline-block;
+}
+.form-group{
+	margin-bottom: 5px;
+}
+#newDomain-button{
+	margin-left: 10px;
+}
+#save-button{
+	margin-bottom: 5px;
+	vertical-align: top;
+}
+#error-message{
+	color: red;
+	margin-bottom: 5px;
+	display: inline-block;
+	margin-left: 5px;
+}
+#feedback {
+	color: green;
+	margin-bottom: 5px;
+	display: inline-block;
+	margin-left: 5px;
+}
+.url {
+	color: #264c73;
+}
+h4 {
+	color: #336699;
+}

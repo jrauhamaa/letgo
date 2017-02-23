@@ -1,0 +1,20 @@
+.time {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.url {
+  font-size: 16px;
+  color: #264c73;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
+}
+
+h1 {
+  margin-top: 50px;
+  margin-bottom: 20px;
+}

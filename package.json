@@ -1,9 +1,0 @@
-{
-  "title": "LetGo",
-  "name": "letgo",
-  "version": "0.1.0",
-  "description": "Delay loading of distracting web pages to focus on your work.",
-  "main": "main.js",
-  "author": "jrauhamaa",
-  "license": "GPL"
-}

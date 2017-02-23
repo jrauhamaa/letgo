@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+	<title>LetGo</title>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" href="bootstrap.min.css">
+	<link rel="stylesheet" href="options.css">
+</head>
+
+<body>
+	<div class="container">
+		<h1>Let Go</h1>
+
+    <div id="content">
+  		<div id="error-message"></div>
+  		<div id="feedback"></div>
+  		<div class="form-group">
+  			<label class="input-label">Waiting time (sec)</label>
+  			<input type="text" id="pageLoadDelay-input" class="short-input">
+  		</div>
+  		<div class="form-group">
+  			<label class="input-label">Wait expiration time (min)</label>
+  			<input type="text" id="pageVisitTime-input" class="short-input">
+  		</div>
+  		<div class="form-group">
+  			<label for="filteredDomains">Filtered domains</label>
+  			<button type="button" class="btn btn-default btn-xs" id="newDomain-button">Add</button>
+  			<div id="filteredDomains-list"></div>
+  		</div>
+      <button type="button" class="btn btn-primary " id="save-button">Save</button>
+    </div>
+	</div>
+</body>
+
+<script src="jquery-3.1.1.min.js" ></script>
+<script src="options.js" ></script>
+
+</html>
