@@ -35,6 +35,11 @@ function checkPage(tab) {
 
 
 window.setInterval(function() {
+    chrome.tabs.query({active: false}, (tabs) => {
+        const waitingTabs = tabs.filter((t) =>
+            t.url.startsWith(`chrome-extension://${chrome.runtime.id}/data/blocked.html`));
+        chrome.tabs.remove(waitingTabs.map((t) => t.id));
+    });
     chrome.tabs.query({active: true}, (tabs) => {
         const activeTab = tabs[0];
         if (activeTab.url.indexOf("http://") != -1 || activeTab.url.indexOf("https://") != -1) {
