@@ -34,16 +34,19 @@ function checkPage(tab) {
 }
 
 
+function removeWaitingTabs(tabs) {
+    const waitingTabs = tabs.filter((t) => t.url.startsWith(warningPage));
+    chrome.tabs.remove(waitingTabs.map((t) => t.id));
+}
+
+
 window.setInterval(function() {
-    chrome.tabs.query({active: false}, (tabs) => {
-        const waitingTabs = tabs.filter((t) =>
-            t.url.startsWith(`chrome-extension://${chrome.runtime.id}/data/blocked.html`));
-        chrome.tabs.remove(waitingTabs.map((t) => t.id));
+    // remove inactive waiting tabs from current window
+    chrome.tabs.query({active: false, currentWindow: true}, removeWaitingTabs);
+    // remove all waiting tabs from inactive windows
+    chrome.tabs.query({currentWindow: false}, removeWaitingTabs);
+    // check current tab
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+        if (tabs.length) checkPage(tabs[0]);
     });
-    chrome.tabs.query({active: true}, (tabs) => {
-        const activeTab = tabs[0];
-        if (activeTab.url.indexOf("http://") != -1 || activeTab.url.indexOf("https://") != -1) {
-            checkPage(activeTab);
-        }
-    });
-}, 500);
+}, 1000);
