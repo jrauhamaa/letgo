@@ -55,7 +55,7 @@ saveButton.click(function() {
     }
 
     const pageLoadDelay = $("#pageLoadDelay-input").val();
-    const waitExpirationTime = $("#pageVisitTime-input").val();
+    const pageVisitTime = $("#pageVisitTime-input").val();
 
     chrome.storage.sync.get(['blockedDomains'], (obj) => {
         const blockedDomains = {};
@@ -73,7 +73,7 @@ saveButton.click(function() {
             }
         };
 
-        chrome.storage.sync.set({pageLoadDelay, waitExpirationTime, blockedDomains}, () => {
+        chrome.storage.sync.set({pageLoadDelay, pageVisitTime, blockedDomains}, () => {
             $("#feedback").html("Changes successfully saved");
         });
     });
